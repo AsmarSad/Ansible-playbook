@@ -1,0 +1,28 @@
+---
+- name: Wait for apt lock to be released
+  shell: |
+    while sudo lsof /var/lib/dpkg/lock >/dev/null 2>&1; do
+      echo "Waiting for other apt processes to finish..."
+      sleep 10
+    done
+  changed_when: false
+
+- name: Update apt packages
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install common packages
+  ansible.builtin.apt:
+    name:
+      - git
+      - curl
+      - unzip
+      - build-essential
+    state: present
+  register: common_packages_result
+  retries: 3
+  delay: 10
+  until: common_packages_result is succeeded
+
+- include_tasks: install_docker.yml
+

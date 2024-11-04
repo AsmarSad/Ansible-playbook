@@ -1,0 +1,13 @@
+---
+- name: Add GitLab repository
+  ansible.builtin.shell: |
+    curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash
+  args:
+    executable: /bin/bash
+
+- name: Install GitLab CE
+  ansible.builtin.apt:
+    name: gitlab-ce
+    state: latest
+  notify: Reconfigure GitLab
+
