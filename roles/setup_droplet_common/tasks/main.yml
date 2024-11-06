@@ -19,10 +19,6 @@
       - unzip
       - build-essential
     state: present
-  register: common_packages_result
   retries: 3
   delay: 10
-  until: common_packages_result is succeeded
-
-- include_tasks: install_docker.yml
 

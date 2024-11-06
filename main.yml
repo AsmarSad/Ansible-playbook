@@ -1,18 +1,33 @@
 ---
-- name: Provision and Configure DigitalOcean Droplet
+- name: Provision DigitalOcean Droplets
   hosts: localhost
   gather_facts: no
   vars_files:
     - secrets.yml
+  vars:
+    region: "nyc3"
+    size: "m-2vcpu-16gb"
+    image: "ubuntu-22-04-x64"
 
   roles:
-    - provision_droplet
+    - provision_gitlab_droplet
+    - provision_webserver_droplet
 
-- name: Setup Development Environment on Remote Droplet
-  hosts: remote_droplet
+- name: Setup GitLab Environment on GitLab Droplet
+  hosts: gitlab_droplet
   become: yes
   gather_facts: yes
   roles:
-    - setup_droplet
+    - setup_droplet_common
+    - install_docker
     - install_gitlab
+
+- name: Setup Web Server Environment on Web Server Droplet
+  hosts: webserver_droplet
+  become: yes
+  gather_facts: yes
+  roles:
+    - setup_droplet_common
+    - install_docker
+    - install_nginx
 

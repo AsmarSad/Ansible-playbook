@@ -1,5 +1,0 @@
-droplet_name: "tea-project"
-region: "nyc3"
-size: "m-2vcpu-16gb"
-image: "ubuntu-22-04-x64"
-
